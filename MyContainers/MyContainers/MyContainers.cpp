@@ -2,11 +2,20 @@
 //
 
 #include "stdafx.h"
-
+#include "MyStack.h"
 
 int main()
 {
-	std::cout << "hello world" << std::endl;
+	MyStack<int> Stack;
+	for (int i = 0; i < 100000; ++i)
+	{
+		Stack.push(i);
+	}
+	//Stack.testPrint();
+	for (int i = 0; i < 50000; ++i)
+	{
+		std::cout << Stack.pop() << std::endl;
+	}
 	return 0;
 }
 
