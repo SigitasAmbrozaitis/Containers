@@ -6,6 +6,7 @@
 #include "MyLinkedList.h"
 #include "MyList.h"
 #include "MyTree.h"
+#include "MyVector.h"
 
 int main()
 {
@@ -30,12 +31,27 @@ int main()
 	//insert works as intended
 	//delete works as intended
 	//find works as intended
-	//up to 3000 elements can be added after that stack size is not enough for recursion
+	//more than 3000 elements can be worked with after that stack size is not enough for recursion
 	//TODO implement different traversals
 
-	//TODO create vector
+	//Vector
+	//insert works as intended
+	//delete works as intended
+	//find works as intended
+	//moe than 10000000 elements can be worked with
+
 	//TODO create Queue
 	//TODO create AVLTree
+	//TODO impleent exception throwing to all data structures
+
+
+	MyVector<int> array;
+	for (int i = 0; i < 10000000; ++i)
+	{
+		array.Insert(i, i);
+	}
+	//array.Insert(0,);
+	array.TestPrint();
 
 	return 0;
 }
