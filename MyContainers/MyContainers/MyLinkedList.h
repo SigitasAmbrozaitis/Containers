@@ -159,11 +159,11 @@ inline void MyLinkedList<T>::delLast()
 {
 	///check validation
 	if (listSize == 0) { return; }
-	if (!root) { return; }
+	if (root == nullptr) { return; }
 	if (root->next == nullptr) { delete root; root = nullptr; }
 	///traverse to the last element
 	LinkedListNode<T> * currentNode = root;
-	while (currentNode->next->next != nullptr)
+	while (currentNode->next != nullptr)
 	{
 		currentNode = currentNode->next;
 	}

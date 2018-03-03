@@ -62,6 +62,7 @@ inline void MyStack<T>::push(T value)
 template<class T>
 inline T MyStack<T>::pop()
 {
+	if (root == nullptr) { return NULL; }
 	T valueToReturn = root->value;
 	StackNode<T> * temp = root;
 	root = root->next;

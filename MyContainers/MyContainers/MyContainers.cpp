@@ -4,66 +4,38 @@
 #include "stdafx.h"
 #include "MyStack.h"
 #include "MyLinkedList.h"
-#include "List.h"
+#include "MyList.h"
+#include "MyTree.h"
 
 int main()
 {
-	/*MyStack<int> Stack;
-	for (int i = 0; i < 100000; ++i)
-	{
-		Stack.push(i);
-	}
-	//Stack.testPrint();
-	for (int i = 0; i < 100000; ++i)
-	{
-		std::cout << Stack.pop() << std::endl;
-	}*/
-	/*
-	MyLinkedList<int> LinkedList;
+	//Stack
+	//push works as intended
+	//pop works as intended
+	//scales more than 10000000, should go to infinity, aborted due to long test times
 	
-	for (int i = 0; i < 100; ++i)
-	{
-		LinkedList.add(i*10,i);
-	}
+	//LinkedList
+	// add all methods works as intended
+	// del all methods works as intended
+	// find all methods works as intended
+	// more than 100000 elements scales without memory leaks
 
-	int index = 0;
-	int value = 0;
-
-	std::cout << "status: " << LinkedList.findByIndex(value, 50);
-	std::cout << "found value: " << value << std::endl;
-	std::cout << "status: " << LinkedList.findByValue(index, 95);
-	std::cout << "found value: " << index << std::endl;
-	//std::cout << LinkedList.size() << std::endl;
-	//LinkedList.testPrint();
-	*/
-
-	//list 
+	//List 
 	//add all methods works as intended
 	//del all methods works as intended
-	//
-	//up tp 10000000 elements scales without memory leaks
-	//
-	List<int> list;
-	for (int i = 0; i < 5; ++i)
-	{
-		//std::cout << "add nr:" << i << std::endl;
-		list.addFirst(i*10);
-	}
+	//find all methods works as intended
+	//more than 10000000 elements scales without memory leaks
 
-	//list.add(-1, 0);
-	//list.testPrint();
-	/*for (int i = 0; i < 10000000; ++i)
-	{
-		list.delFirst();
-	}*/
-	list.testPrint();
-	int index = 0;
-	int value = 0;
+	//Tree
+	//insert works as intended
+	//delete works as intended
+	//find works as intended
+	//up to 3000 elements can be added after that stack size is not enough for recursion
+	//TODO implement different traversals
 
-	std::cout << "status: " << list.findByIndex(value, 0);
-	std::cout << "found value: " << value << std::endl;
-	std::cout << "status: " << list.findByValue(index,40);
-	std::cout << "found value: " << index << std::endl;
+	//TODO create vector
+	//TODO create Queue
+	//TODO create AVLTree
 
 	return 0;
 }
