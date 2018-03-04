@@ -7,6 +7,7 @@
 #include "MyList.h"
 #include "MyTree.h"
 #include "MyVector.h"
+#include "MyQueue.h"
 
 int main()
 {
@@ -38,20 +39,32 @@ int main()
 	//insert works as intended
 	//delete works as intended
 	//find works as intended
-	//moe than 10000000 elements can be worked with
+	//more than 10000000 elements can be worked with
 
-	//TODO create Queue
-	//TODO create AVLTree
-	//TODO impleent exception throwing to all data structures
-
-
-	MyVector<int> array;
+	//Queue
+	//enque works as intended
+	//deque works as intended
+	//more than 10000000 elements can scale
+	MyQueue<int> queue;
 	for (int i = 0; i < 10000000; ++i)
 	{
-		array.Insert(i, i);
+		queue.Enque(i);
 	}
-	//array.Insert(0,);
-	array.TestPrint();
+	queue.TestPrint();
+	std::cout << queue.Size() << std::endl;
+	for (int i = 0; i < 1000000; ++i)
+	{
+		std::cout << queue.Deque() << " ";
+	}
+	std::cout << std::endl;
+	std::cout << queue.Size() << std::endl;
+
+	//TODO create AVLTree
+	//TODO impleent exception throwing to all data structures
+	//TODO implement exception handles in case there is no more space to allocate
+
+
+
 
 	return 0;
 }
