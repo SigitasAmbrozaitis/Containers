@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include "MyException.h"
 //**********************************************
 //*************		QueueNode      *************
 template <class T>

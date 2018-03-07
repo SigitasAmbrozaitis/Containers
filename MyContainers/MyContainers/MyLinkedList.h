@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include "MyException.h"
 //**********************************************
 //**********	LinkedListNode      ************
 template <class T>
