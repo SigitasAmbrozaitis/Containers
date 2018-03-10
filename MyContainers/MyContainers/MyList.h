@@ -29,20 +29,20 @@ class MyList
 public:
 	MyList(); ///constructor
 
-	void add(T value, int index);	///insert element at index location
-	void addFirst(T value);			///insert element in the front
-	void addLast(T value);			///insert element at the back
+	void Add(T value, int index);	///insert element at index location
+	void AddFirst(T value);			///insert element in the front
+	void AddLast(T value);			///insert element at the back
 
-	void del(int index);			///delete element at index location
-	void delFirst();				///delete element in the front
-	void delLast();					///delete element at the back
+	void Del(int index);			///delete element at index location
+	void DelFirst();				///delete element in the front
+	void DelLast();					///delete element at the back
 
-	bool findByValue(int &returnValue, T value);	///find element by value, return true if found, and index
-	bool findByIndex(T &returnValue, int index);	///find element at index location, return true if found and element
-	bool exists(T value);							///check if element exists in the list, return true if it is
+	bool FindByValue(int &returnValue, T value);	///find element by value, return true if found, and index
+	bool FindByIndex(T &returnValue, int index);	///find element at index location, return true if found and element
+	bool Exists(T value);							///check if element exists in the list, return true if it is
 
-	int size();										///return size of the list
-	void testPrint();								///prints all list, for testing purposes
+	int Size();										///return size of the list
+	void TestPrint();								///prints all list, for testing purposes
 	
 protected:
 private:
@@ -63,140 +63,166 @@ inline MyList<T>::MyList()
 }
 
 template<class T>
-inline void MyList<T>::add(T value, int index)
+inline void MyList<T>::Add(T value, int index)
 {
-	///check validation
-	if (index < 0 || index>listSize) { return; }
-	if (index == 0) { addFirst(value); return; }
-	if (index == listSize) { addLast(value); return; }
-	///traverse through list to index
-	ListNode<T> * currentNode;
-	ListNode<T> * node = new ListNode<T>(value);
-	///if index is at the front of list traverse from root
-	if (listSize / 2 > index)
+	try
 	{
-		currentNode = root;
-		for (int i = 0; i < index-1; ++i)
+		///check validation
+		if (index < 0 || index>listSize) { throw MyException(1); }
+		else if (index == 0) { AddFirst(value); }
+		else if (index == listSize) { AddLast(value); }
+		else
 		{
-			currentNode = currentNode->next;
+			///traverse through list to index
+			ListNode<T> * currentNode;
+			ListNode<T> * node = new ListNode<T>(value);
+			///if index is at the front of list traverse from root
+			if (listSize / 2 > index)
+			{
+				currentNode = root;
+				for (int i = 0; i < index - 1; ++i)
+				{
+					currentNode = currentNode->next;
+				}
+				ListNode<T> * node = currentNode->next;
+				currentNode->next = new ListNode<T>(value);
+				node->previous = currentNode->next;
+				currentNode->next->next = node;
+				currentNode->next->previous = currentNode;
+			}
+			///if index at the end of list traverse through end
+			else
+			{
+				currentNode = end;
+				for (int i = 0; i < listSize - index - 1; ++i)
+				{
+					currentNode = currentNode->previous;
+				}
+				ListNode<T> * node = currentNode->previous;
+				currentNode->previous = new ListNode<T>(value);
+				node->next = currentNode->previous;
+				currentNode->previous->previous = node;
+				currentNode->previous->next = currentNode;
+			}
+			++listSize;
 		}
-		ListNode<T> * node = currentNode->next;
-		currentNode->next = new ListNode<T>(value);
-		node->previous = currentNode->next;
-		currentNode->next->next = node;
-		currentNode->next->previous = currentNode;
 	}
-	///if index at the end of list traverse through end
-	else
-	{
-		currentNode = end;
-		for (int i = 0; i < listSize - index-1; ++i)
-		{
-			currentNode = currentNode->previous;
-		}
-		ListNode<T> * node = currentNode->previous;
-		currentNode->previous = new ListNode<T>(value);
-		node->next = currentNode->previous;
-		currentNode->previous->previous = node;
-		currentNode->previous->next = currentNode;
-	}
-	++listSize;
+	catch (std::exception &ex) { throw; }
 }
 
 template<class T>
-inline void MyList<T>::addFirst(T value)
+inline void MyList<T>::AddFirst(T value)
+{
+	try
+	{
+		///if list is empty
+		if (root == nullptr) { root = new ListNode<T>(value); }
+		///if there is 1 element in list
+		else if (root != nullptr && end == nullptr) 
+		{ 
+			end = root;
+			root = new ListNode<T>(value);
+			root->next = end;
+			end->previous = root;
+		}
+		///if there is >1 elements in list
+		else
+		{
+			ListNode<T> * node = root;
+			root = new ListNode<T>(value);
+			root->next = node;
+			node->previous = root;
+		}
+		++listSize;
+	}
+	catch (std::exception &ex) { throw; }
+
+}
+
+template<class T>
+inline void MyList<T>::AddLast(T value)
 {
 	///if list is empty
-	if (root == nullptr) { root = new ListNode<T>(value); ++listSize; return; }
-	///if there is 1 element in list
-	if (root != nullptr && end == nullptr) 
-	{ 
-		end = root;
-		root = new ListNode<T>(value);
-		root->next = end;
-		end->previous = root;
-	}
-	///if there is >1 elements in list
-	else
+	try
 	{
-		ListNode<T> * node = root;
-		root = new ListNode<T>(value);
-		root->next = node;
-		node->previous = root;
+		if (root == nullptr) { root = new ListNode<T>(value); }
+		///if list has one element
+		else if (root != nullptr && end == nullptr)
+		{
+				end = new ListNode<T>(value); 
+				root->next = end;
+				end->previous = root;
+		}
+		///if list has >1 elements
+		else
+		{
+			ListNode<T> * node;
+			node = new ListNode<T>(value); 		
+			node->previous = end;
+			end->next = node;
+			end = node;
+		}
+		++listSize;
 	}
-	++listSize;
+	catch (std::exception ex) { throw; }
+
 }
 
 template<class T>
-inline void MyList<T>::addLast(T value)
+inline void MyList<T>::Del(int index)
+{
+	try
+	{
+		///if index not in range
+		if (index<0 || index > listSize) { throw MyException(1); }
+		///if index 0
+		if (index == 0) { DelFirst(); return; }
+		///if index list size
+		if (index == listSize - 1) { DelLast(); return; }
+		///traverse to the index
+		ListNode<T> * currentNode;
+		///if index at front of list go from root
+		if (listSize / 2 > index)
+		{
+			currentNode = root;
+			for (int i = 0; i < index-1; ++i)
+			{
+				currentNode = currentNode->next;
+			}
+			ListNode<T> * node = currentNode->next;
+			currentNode->next = node->next;
+			currentNode->next->previous = currentNode;
+			delete node;
+		}
+		///if index at back of list go from end
+		else
+		{
+			currentNode = end;
+			for (int i = 0; i < listSize - index-2; ++i)
+			{
+				currentNode = currentNode->previous;
+			}
+			ListNode<T> * node = currentNode->previous;
+			currentNode->previous = node->previous;
+			currentNode->previous->next = currentNode;
+			delete node;
+		}
+		--listSize;
+	}
+	catch (std::exception &ex) { throw; }
+}
+
+template<class T>
+inline void MyList<T>::DelFirst()
 {
 	///if list is empty
-	if (root == nullptr) { root = new ListNode<T>(value); ++listSize; return; }
-	///if list has one element
-	if (root != nullptr && end == nullptr)
-	{
-		end = new ListNode<T>(value);
-		root->next = end;
-		end->previous = root;
-	}
-	///if list has >1 elements
-	else
-	{
-		ListNode<T> * node = new ListNode<T>(value);
-		node->previous = end;
-		end->next = node;
-		end = node;
-	}
-	++listSize;
-}
-
-template<class T>
-inline void MyList<T>::del(int index)
-{
-	///if index not in range
-	if (index<0 || index > listSize) { return; }
-	///if index 0
-	if (index == 0) { delFirst(); return; }
-	///if index list size
-	if (index == listSize - 1) { delLast(); return; }
-	///traverse to the index
-	ListNode<T> * currentNode;
-	///if index at front of list go from root
-	if (listSize / 2 > index)
-	{
-		currentNode = root;
-		for (int i = 0; i < index-1; ++i)
-		{
-			currentNode = currentNode->next;
-		}
-		ListNode<T> * node = currentNode->next;
-		currentNode->next = node->next;
-		currentNode->next->previous = currentNode;
-		delete node;
-	}
-	///if index at back of list go from end
-	else
-	{
-		currentNode = end;
-		for (int i = 0; i < listSize - index-2; ++i)
-		{
-			currentNode = currentNode->previous;
-		}
-		ListNode<T> * node = currentNode->previous;
-		currentNode->previous = node->previous;
-		currentNode->previous->next = currentNode;
-		delete node;
-	}
-	--listSize;
-}
-
-template<class T>
-inline void MyList<T>::delFirst()
-{
-	///if list is empty
-	if (root == nullptr) { return; }
+	if (root == nullptr) { throw MyException(2); }
 	///if there is only root
-	else if (root != nullptr && end == nullptr) { delete root; root = nullptr;}
+	else if (root != nullptr && end == nullptr) 
+	{ 
+		delete root; 
+		root = nullptr;
+	}
 	///if there is only 2 elements root and end
 	else if (listSize == 2) { delete root; root = end; root->previous = nullptr; end = nullptr; }
 	///if there is more than 2 elements
@@ -211,10 +237,10 @@ inline void MyList<T>::delFirst()
 }
 
 template<class T>
-inline void MyList<T>::delLast()
+inline void MyList<T>::DelLast()
 {
 	///if list is empty
-	if (root == nullptr) { return; }
+	if (root == nullptr) { throw MyException(2); }
 	///if there is only root
 	else if (root != nullptr && end == nullptr) { delete root; root = nullptr;}
 	///if there is only 2 elements root and end
@@ -228,10 +254,10 @@ inline void MyList<T>::delLast()
 		delete node;
 	}
 	--listSize;
-}
+}//TODO fix deletion, currently memory isnt freed
 
 template<class T>
-inline bool MyList<T>::findByValue(int & returnValue, T value)
+inline bool MyList<T>::FindByValue(int & returnValue, T value)
 {
 	bool valueToReturn = false;
 	int index = 0;
@@ -251,11 +277,12 @@ inline bool MyList<T>::findByValue(int & returnValue, T value)
 }
 
 template<class T>
-inline bool MyList<T>::findByIndex(T & returnValue, int index)
+inline bool MyList<T>::FindByIndex(T & returnValue, int index)
 {
 	bool valueToReturn = false;
 	///return false if out of bounds
-	if (index < 0 || index>listSize - 1) { return false; }
+	if (listSize == 0) { throw MyException(2); }
+	else if (index < 0 || index>listSize - 1) { throw MyException(1); }
 	ListNode<T> * currentNode;
 	///if index at start start from root
 	if (listSize / 2 > index) 
@@ -281,20 +308,20 @@ inline bool MyList<T>::findByIndex(T & returnValue, int index)
 }
 
 template<class T>
-inline bool MyList<T>::exists(T value)
+inline bool MyList<T>::Exists(T value)
 {
-	int discard = 0;
-	return findByValue(discard, value);
+	int discard;
+	return FindByValue(discard, value); 
 }
 
 template<class T>
-inline int MyList<T>::size()
+inline int MyList<T>::Size()
 {
 	return listSize;
 }
 
 template<class T>
-inline void MyList<T>::testPrint()
+inline void MyList<T>::TestPrint()
 {
 	ListNode<T> * currentNode;
 	///print size

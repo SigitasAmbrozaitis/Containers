@@ -20,6 +20,7 @@ MyException::MyException()
 {
 	error = nullptr;
 }
+//0: memory, 1:index 2:size
 MyException::MyException(int index)
 {
 	if (index >= 0 && index< 3) { error = messages[index]; }

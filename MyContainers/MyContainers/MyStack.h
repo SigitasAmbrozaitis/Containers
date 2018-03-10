@@ -27,16 +27,16 @@ class MyStack
 public:
 
 	MyStack();				//constructor
-	void push(T value);		//standart push operation
-	T pop();				//standart pop operation
+	void Push(T value);		//standart push operation
+	T Pop();				//standart pop operation
 
-	void testPrint();		//full stack output for testing
+	void TestPrint();		//full stack output for testing
 
 protected:
 private:
 	StackNode<T> * root;	//top of stack
 
-	void testPrint(StackNode<T> *& node);	//full stack output for testing
+	void TestPrint(StackNode<T> *& node);	//full stack output for testing
 
 };
 //**********************************************
@@ -50,41 +50,46 @@ inline MyStack<T>::MyStack()
 }
 
 template<class T>
-inline void MyStack<T>::push(T value)
+inline void MyStack<T>::Push(T value)
 {
-	if (root == nullptr) { root = new StackNode<T>(value); }
-	else
+	try
 	{
-		StackNode<T> * temp = root;
-		root = new StackNode<T>(value);
-		root->next = temp;
+		if (root == nullptr) { root = new StackNode<T>(value); }
+		else
+		{
+			StackNode<T> * temp = root;
+			root = new StackNode<T>(value);	
+			root->next = temp;
+		}
 	}
+	catch (std::exception &ex) { throw; }
+
 }
 
 template<class T>
-inline T MyStack<T>::pop()
+inline T MyStack<T>::Pop()
 {
-	if (root == nullptr) { return NULL; }
-	T valueToReturn = root->value;
-	StackNode<T> * temp = root;
-	root = root->next;
-	delete temp;
-
-	return valueToReturn;
+		if (root == nullptr) { throw MyException(2); }
+		T valueToReturn = root->value;
+		StackNode<T> * temp = root;
+		root = root->next;
+		delete temp;
+		return valueToReturn;
 }
 
 template<class T>
-inline void MyStack<T>::testPrint()
+inline void MyStack<T>::TestPrint()
 {
-	testPrint(root);
+	if (root == nullptr){ throw MyException(2); }
+	TestPrint(root);
 }
 
 template<class T>
-inline void MyStack<T>::testPrint(StackNode<T> *& node)
+inline void MyStack<T>::TestPrint(StackNode<T> *& node)
 {
-	if (!node) { return; }
+	if (node==nullptr) { return; }
 	std::cout << node->value << std::endl;
-	testPrint(node->next);
+	TestPrint(node->next);
 }
 
 //**********************************************

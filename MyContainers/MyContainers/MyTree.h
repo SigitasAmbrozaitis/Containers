@@ -71,13 +71,20 @@ inline MyTree<T>::MyTree()
 template<class T>
 inline void MyTree<T>::Insert(T value)
 {
-	Insert(root, value);
+	try { Insert(root, value); }
+	catch (std::exception &ex) { throw; }
 }
 
 template<class T>
 inline void MyTree<T>::Delete(T value)
 {
-	Delete(root, value);
+	try
+	{
+		if (root == nullptr) { throw MyException(2); }
+		Delete(root, value);
+	}
+	catch (std::exception &ex) { std::cout << ex.what() << std::endl; }
+	
 }
 
 template<class T>
@@ -95,6 +102,7 @@ template<class T>
 inline void MyTree<T>::Display()
 {
 	Display(root, 0);
+
 
 	std::cout << std::endl;
 	std::cout << std::endl;
@@ -124,13 +132,19 @@ inline void MyTree<T>::PostOrder()
 template<class T>
 inline void MyTree<T>::Insert(TreeNode<T>*& node, T value)
 {
-	if (node == nullptr) ///insert element
-	{ 
-		node = new TreeNode<T>(value); 
-		++treeSize;
+	try
+	{
+		if (node == nullptr) ///insert element
+		{ 
+			node = new TreeNode<T>(value);
+			++treeSize;
+		}
+		///go left
+		else if (value < node->value) { Insert(node->left, value); }
+		///go right
+		else { Insert(node->right, value); }
 	}
-	else if (value < node->value) 	{ Insert(node->left, value); }	///go left
-	else {	Insert(node->right, value); }							///go right
+	catch (std::exception &ex) { throw; }
 }
 
 template<class T>

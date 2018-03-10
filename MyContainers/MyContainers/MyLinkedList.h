@@ -26,20 +26,20 @@ class MyLinkedList
 public:
 	MyLinkedList();					///constructor
 
-	void add(T value, int index);	///insert element at index location
-	void addFirst(T value);			///insert element in the front
-	void addLast(T value);			///insert element at the back
+	void Add(T value, int index);	///insert element at index location
+	void AddFirst(T value);			///insert element in the front
+	void AddLast(T value);			///insert element at the back
 
-	void del(int index);			///delete element at index location
-	void delFirst();				///delete element in the front
-	void delLast();					///delete element at the back
+	void Del(int index);			///delete element at index location
+	void DelFirst();				///delete element in the front
+	void DelLast();					///delete element at the back
 
-	bool findByValue(int &returnValue, T value);	///find element by value, return true if found, and index
-	bool findByIndex(T &returnValue, int index);	///find element at index location, return true if found and element
-	bool exists(T value);							///check if element exists in the list, return true if it is
+	bool FindByValue(int &returnValue, T value);	///find element by value, return true if found, and index
+	bool FindByIndex(T &returnValue, int index);	///find element at index location, return true if found and element
+	bool Exists(T value);							///check if element exists in the list, return true if it is
 
-	int size();										///return size of the list
-	void testPrint();								///prints all list, for testing purposes
+	int Size();										///return size of the list
+	void TestPrint();								///prints all list, for testing purposes
 
 protected:
 private:
@@ -58,92 +58,116 @@ inline MyLinkedList<T>::MyLinkedList()
 }
 
 template<class T>
-inline void MyLinkedList<T>::add(T value, int index)
+inline void MyLinkedList<T>::Add(T value, int index)
 {
-	///check validation
-	if (index < 0 || index > listSize) { return; }
-	else if (index == 0) { addFirst(value); }
-	else if (index == listSize) { addLast(value); }
-	else if (root == nullptr) { root = new LinkedListNode<T>(value); ++listSize; }
-	else
+	try
 	{
-		///locate where element must be inserted to
-		LinkedListNode<T> * currentNode = root;
-		for (int i = 0; i < index-1; ++i)
-		{
-			currentNode = currentNode->next;
+		///check validation
+		if (index < 0 || index > listSize) { throw MyException(1); }
+		else if (index == 0) { AddFirst(value); }
+		else if (index == listSize) { AddLast(value); }
+		else if (root == nullptr) 
+		{ 
+			root = new LinkedListNode<T>(value);
+			++listSize; 
 		}
-		///inser element to found location
-		LinkedListNode<T> *temp = currentNode->next;
-		currentNode->next = new LinkedListNode<T>(value);
-		currentNode->next->next = temp;
+		else
+		{
+			///locate where element must be inserted to
+			LinkedListNode<T> * currentNode = root;
+			for (int i = 0; i < index-1; ++i)
+			{
+				currentNode = currentNode->next;
+			}
+			///inser element to found location
+			LinkedListNode<T> *temp = currentNode->next;
+			currentNode->next = new LinkedListNode<T>(value);
+			currentNode->next->next = temp;
+			++listSize;
+		}
+	}
+	catch (std::exception &ex) { throw; }
+}
+
+template<class T>
+inline void MyLinkedList<T>::AddFirst(T value)
+{
+	try
+	{
+		///check validation
+		if (root == nullptr) { root = new LinkedListNode<T>(value); }
+		///insert element at first location
+		else
+		{
+			LinkedListNode<T> * elementToInsert = root;
+			root = new LinkedListNode<T>(value);
+			root->next = elementToInsert;
+		}
 		++listSize;
 	}
-	
+	catch (std::exception &ex) { throw; }
 }
 
 template<class T>
-inline void MyLinkedList<T>::addFirst(T value)
+inline void MyLinkedList<T>::AddLast(T value)
 {
-	///check validation
-	if (root == nullptr) { root = new LinkedListNode<T>(value); ++listSize; return; }
-
-	///insert element at first location
-	LinkedListNode<T> * elementToInsert = root;
-	root = new LinkedListNode<T>(value);
-	root->next = elementToInsert;
-	++listSize;
-}
-
-template<class T>
-inline void MyLinkedList<T>::addLast(T value)
-{
-	///check validation
-	if (root == nullptr) { root = new LinkedListNode<T>(value); ++listSize; return; }
-	LinkedListNode<T> * currentNode = root;
-	///traverse to the end 
-	while (currentNode->next != nullptr)
+	try
 	{
-		currentNode = currentNode->next;
-	}
-	///add element
-	currentNode->next = new LinkedListNode<T>(value);
-	++listSize;
-
-}
-
-template<class T>
-inline void MyLinkedList<T>::del(int index)
-{
-	///check validation
-	if (listSize == 0) { return; }
-	else if (index < 0 || index >= listSize) { return; }
-	else if (index == 0) { delFirst(); }
-	else if (index == listSize-1) { delLast(); }
-	else if (root->next == nullptr) { delete root; root = nullptr; --listSize; }
-	else if (root == nullptr) { std::cout << "im empty\n"; }
-	else
-	{
-		///traverse to index-1
-		LinkedListNode<T> * currentNode = root;
-		for (int i = 0; i < index - 1; ++i)
+		///check validation
+		if (root == nullptr) { root = new LinkedListNode<T>(value); }
+		else 
 		{
-			currentNode = currentNode->next;
+			LinkedListNode<T> * currentNode = root;
+			///traverse to the end 
+			while (currentNode->next != nullptr)
+			{
+				currentNode = currentNode->next;
+			}
+			///add element
+			currentNode->next = new LinkedListNode<T>(value);
 		}
-		///delete elemnt at index
-		LinkedListNode<T> * temp = currentNode->next;
-		currentNode->next = temp->next;
-		delete temp;
-		--listSize;
+		++listSize;
 	}
+	catch (std::exception &ex) { throw; }
 }
 
 template<class T>
-inline void MyLinkedList<T>::delFirst()
+inline void MyLinkedList<T>::Del(int index)
+{
+	try 
+	{
+		///check validation
+		if (listSize == 0) { throw MyException(2); }
+		else if (index < 0 || index >= listSize) { throw MyException(1); }
+		else if (index == 0) { DelFirst(); }
+		else if (index == listSize-1) { DelLast(); }
+		else if (root->next == nullptr) { delete root; root = nullptr; --listSize; }
+		else if (root == nullptr) { throw MyException(2); }
+		else
+		{
+			///traverse to index-1
+			LinkedListNode<T> * currentNode = root;
+			for (int i = 0; i < index - 1; ++i)
+			{
+				currentNode = currentNode->next;
+			}
+			///delete elemnt at index
+			LinkedListNode<T> * temp = currentNode->next;
+			currentNode->next = temp->next;
+			delete temp;
+			--listSize;
+		}
+	}
+	catch (std::exception &ex) { throw; }
+
+}
+
+template<class T>
+inline void MyLinkedList<T>::DelFirst()
 {
 	///check validation
-	if (listSize == 0) { return; }
-	if (!root) { return; }
+	if (listSize == 0) { throw MyException(2); }
+	if (root == nullptr) { throw MyException(2); }
 	if (root->next == nullptr) { delete root; root = nullptr;}
 	else
 	{
@@ -151,17 +175,16 @@ inline void MyLinkedList<T>::delFirst()
 		LinkedListNode<T> * temp = root;
 		root = root->next;
 		delete temp;
-		
 	}
 	--listSize;
 }
 
 template<class T>
-inline void MyLinkedList<T>::delLast()
+inline void MyLinkedList<T>::DelLast() //TODO fix deletion, currently memory isnt freed
 {
 	///check validation
-	if (listSize == 0) { return; }
-	if (root == nullptr) { return; }
+	if (listSize == 0) { throw MyException(2); }
+	if (root == nullptr) { throw MyException(2); }
 	if (root->next == nullptr) { delete root; root = nullptr; }
 	///traverse to the last element
 	LinkedListNode<T> * currentNode = root;
@@ -176,12 +199,12 @@ inline void MyLinkedList<T>::delLast()
 }
 
 template<class T>
-inline bool MyLinkedList<T>::findByValue(int & returnValue, T value)
+inline bool MyLinkedList<T>::FindByValue(int & returnValue, T value)
 {
 	bool statusReport = false;
 	///check validation
-	if (listSize==0) { return false; }
-	if (!root) { return false; }
+	if (listSize==0) { throw MyException(2); }
+	if (root == nullptr) { throw MyException(2); }
 	///traverse through the list, count index, search for element
 	LinkedListNode<T> * currentNode = root;
 	int index = 0;
@@ -201,11 +224,12 @@ inline bool MyLinkedList<T>::findByValue(int & returnValue, T value)
 }
 
 template<class T>
-inline bool MyLinkedList<T>::findByIndex(T & returnValue, int index)
+inline bool MyLinkedList<T>::FindByIndex(T & returnValue, int index)
 {
+
 	bool statusReport = false;
 	///check validation
-	if (index < 0 || index > listSize) { return false; }
+	if (index < 0 || index > listSize) { throw MyException(1); }
 
 	///traverse through list at the index
 	LinkedListNode<T> * currentNode = root;
@@ -220,21 +244,22 @@ inline bool MyLinkedList<T>::findByIndex(T & returnValue, int index)
 }
 
 template<class T>
-inline bool MyLinkedList<T>::exists(T value)
+inline bool MyLinkedList<T>::Exists(T value)
 {
-	return findByValue(int noNeed, value);
+	int discard;
+	return FindByValue(discard, value);
 }
 
 template<class T>
-inline int MyLinkedList<T>::size()
+inline int MyLinkedList<T>::Size()
 {
 	return listSize;
 }
 
 template<class T>
-inline void MyLinkedList<T>::testPrint()
+inline void MyLinkedList<T>::TestPrint()
 {
-	if (!root) { std::cout << "empty\n"; return; }
+	if (root == nullptr) { throw MyException(2); }
 	std::cout << listSize << ": ";
 	LinkedListNode<T> * currentNode = root;
 	int counter = 0;

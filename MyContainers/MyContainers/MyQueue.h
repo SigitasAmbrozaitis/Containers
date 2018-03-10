@@ -50,22 +50,27 @@ inline MyQueue<T>::MyQueue()
 template<class T>
 inline void MyQueue<T>::Enque(T value)
 {
-	//if root nullptr create root
-	if (root == nullptr) { root = new QueueNode<T>(value); }
-	else if (end == nullptr) { end = new QueueNode<T>(value); root->next = end; }
-	else
+	try
 	{
-		end->next = new QueueNode<T>(value);
-		end = end->next;
+		//if root nullptr create root
+		if (root == nullptr) { root = new QueueNode<T>(value); }
+		else if (end == nullptr) { end = new QueueNode<T>(value); root->next = end; }
+		else
+		{
+			end->next = new QueueNode<T>(value);
+			end = end->next;
+		}
+		++queueSize;
 	}
-	++queueSize;
+	catch (std::exception &ex) { throw; }
+
 }
 
 template<class T>
 inline T MyQueue<T>::Deque()
 {
 	T valueToReturn;
-	if (root == nullptr) { std::cout << "Empty" << std::endl; return NULL; }//TODO implement throw to exit 
+	if (root == nullptr) { throw MyException(2); }//TODO implement throw to exit 
 	else if (root == end) 
 	{
 		valueToReturn = root->value;
