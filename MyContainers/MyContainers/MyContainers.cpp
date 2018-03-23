@@ -3,7 +3,10 @@
 #include "stdafx.h"
 #include <iostream>
 #include <string>
+#include <stdlib.h>
+#include <windows.h>
 
+#include "MyAvlTree.h"
 #include "MyStack.h"
 #include "MyLinkedList.h"
 #include "MyList.h"
@@ -13,6 +16,10 @@
 #include "MyException.h"
 
 #define SIZE 1000000
+
+MyAvlTree<int> tree;
+
+void testAVLTree();
 void testStack();
 void testLinkedList();
 void testList();
@@ -20,20 +27,42 @@ void testTree();
 void testVector();
 void testQueue();
 
+void printMenu();
+int askInput();
+void test();
 int main()
 {
 //TODO create AVLTree
 //TODO impleent exception throwing to all data structures
-//TODO implement exception handles in case there is no more space to allocate
 
-	testStack();
-	testLinkedList();
-	testList();
-	testTree();
-	testVector();
-	testQueue();
+	testAVLTree();
+	//testStack();
+	//testLinkedList();
+	//testList();
+	//testTree();
+	//testVector();
+	//testQueue();
 
 return 0;
+}
+void testAVLTree()
+{
+	int scale = 200;
+	for (int i = 0; i < scale; ++i)
+	{
+		int rnd = rand() % 50;
+		std::cout << i << std::endl;
+		std::cout << "inserting: " << rnd << std::endl;
+		//Sleep(10000);
+		
+		tree.Insert(rnd);
+		tree.Display();
+	}
+	
+
+	//test();
+
+
 }
 //Stack
 //push works as intended
@@ -244,5 +273,59 @@ void testQueue()
 	}
 	std::cout << "finished deleteing" << std::endl;
 	std::cout << "***********************************" << std::endl << std::endl;
+}
+
+void printMenu()
+{
+	std::cout << "1: insert element\n";
+	std::cout << "2: delete element\n";
+	std::cout << "3: find element\n";
+	std::cout << "4: Display\n";
+	std::cout << "5: Exit\n";
+}
+
+int askInput()
+{
+	int valueToReturn;
+	std::cin >> valueToReturn;
+	return valueToReturn;
+}
+
+void test()
+{
+	printMenu();
+	int value = askInput();
+	int temp;
+	switch (value)
+	{
+	case 1:
+		std::cout << "element to insert: ";
+		temp = askInput();
+		tree.Insert(temp);
+		tree.Display();
+		break;
+	case 2:
+		std::cout << "element to delete: ";
+		temp = askInput();
+		tree.Delete(temp);
+		tree.Display();
+		break;
+	case 3:
+		std::cout << "element to find: ";
+		temp = askInput();
+		std::cout << tree.Find(temp)->data << std::endl;
+		break;
+	case 4:
+		tree.Display();
+		break;
+	case 5:
+		break;
+	default:
+		test();
+		break;
+	}
+
+	test();
+
 }
 
